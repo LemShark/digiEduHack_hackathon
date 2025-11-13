@@ -69,3 +69,30 @@ When your submission is complete, it's time to create the Pull Request.
 5.  Click **"Create pull request"**.
 
 That's it! Your submission is now in the queue for review.
+
+## 🔧 Agent Service Configuration
+
+To run the FastAPI service in `srcs/agentic_analysis`, create a `.env` file (or export variables) with the OpenAI settings. The service now uses a single client that switches between the public OpenAI API and Azure OpenAI just by changing the base URL.
+
+```
+AZURE_OPENAI_API_KEY=...
+AZURE_OPENAI_ENDPOINT=https://api.openai.com
+AZURE_OPENAI_MODEL=gpt-4.1-mini
+AZURE_OPENAI_API_VERSION=2024-09-01-preview
+```
+
+- For the public OpenAI service, keep the endpoint as `https://api.openai.com` (or omit it if you provide it another way) and use a standard API key.
+- For Azure OpenAI, set `AZURE_OPENAI_ENDPOINT` to your resource URL, e.g. `https://YOUR-RESOURCE.openai.azure.com`, and `AZURE_OPENAI_MODEL` to your deployment name. Keep the API version aligned with your Azure deployment.
+- No other code changes are required—switching the endpoint toggles the correct authentication/URL wiring internally.
+
+You can also override the agent's reasoning depth on a per-request basis by adding a `max_steps` field to the JSON payload sent to `/analyze`. It accepts integers between 1 and 20 and falls back to the server default defined in `.env` if omitted.
+
+### Session-based workflow
+
+The `/analyze` endpoint now orchestrates long-running conversations. Each request returns a `session_id` and streams progress into a lightweight JSON store located at `app/tmp_db.json`:
+
+1. Send a POST to `/analyze` with a `query`. Omit `session_id` to start a fresh session; the response will include the generated identifier.
+2. Poll `GET /session/{session_id}` from the frontend (for example, every second) to retrieve the growing message history while the agent reasons and calls tools.
+3. For follow-up questions, include the previously issued `session_id` in the next `/analyze` request so the agent retrieves the full conversation context.
+
+The on-disk storage is intentionally simple. Swap out `app/session_store.py` with your production database integration when ready.
