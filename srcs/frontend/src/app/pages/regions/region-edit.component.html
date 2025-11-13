@@ -1,0 +1,31 @@
+<a routerLink="/regions">← Back to Regions</a>
+<div *ngIf="isLoading">Loading…</div>
+<div *ngIf="error" style="color:var(--danger)">{{ error }}</div>
+<div class="card" style="max-width:640px;margin:20px 0" *ngIf="!isLoading && !error">
+	<h2 style="margin-top:0">Edit Region</h2>
+	<div class="grid">
+		<label>
+			<div>Name</div>
+			<input class="input" [(ngModel)]="name" placeholder="Region name" />
+		</label>
+		<label>
+			<div>Address</div>
+			<input class="input" [(ngModel)]="address" placeholder="Street, City" />
+		</label>
+		<div class="grid cols-2">
+			<label>
+				<div>Contact Email (optional)</div>
+				<input class="input" [(ngModel)]="contactEmail" placeholder="email@example.com" />
+			</label>
+			<label>
+				<div>Contact Phone (optional)</div>
+				<input class="input" [(ngModel)]="contactPhone" placeholder="+1 555 0100" />
+			</label>
+		</div>
+		<button class="btn" [disabled]="isSaving || !name || !address" (click)="save()">
+			{{ isSaving ? 'Saving…' : 'Save Changes' }}
+		</button>
+	</div>
+</div>
+
+

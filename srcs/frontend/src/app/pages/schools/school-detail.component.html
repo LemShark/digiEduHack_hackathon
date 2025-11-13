@@ -1,0 +1,79 @@
+<a routerLink="/schools" class="btn secondary" style="margin-bottom:16px" title="Back to Schools">← Back to Schools</a>
+<div *ngIf="isLoading">Loading…</div>
+<div *ngIf="error" style="color:var(--danger)">{{ error }}</div>
+<div *ngIf="school" class="card">
+	<div class="card-header">
+		<div>
+			<div class="card-title">{{ school.name }}</div>
+			<div class="card-subtitle">School details</div>
+		</div>
+		<div>
+			<button class="btn secondary" *ngIf="isGlobal() && !isEditing" (click)="enableEditing()" style="margin-right:8px">✏️ Edit</button>
+			<button class="btn secondary" *ngIf="isGlobal() && !isEditing" (click)="viewAsSchool()" title="View as School">👁 View as</button>
+			<div *ngIf="isEditing" class="grid" style="grid-template-columns:auto auto; gap:8px">
+				<button class="btn" [disabled]="form?.invalid || isSaving" (click)="save()">
+					{{ isSaving ? 'Saving…' : 'Save changes' }}
+				</button>
+				<button class="btn outline" [disabled]="isSaving" (click)="cancelEditing()">Cancel</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Meta -->
+	<div class="grid cols-3">
+		<div>
+			<div class="muted">Region</div>
+			<div><span class="badge"># {{ school.regionId }}</span></div>
+		</div>
+		<div>
+			<div class="muted">School ID</div>
+			<div><code>{{ school.id }}</code></div>
+		</div>
+		<div>
+			<div class="muted">Mode</div>
+			<div><span class="badge" [class.primary]="isEditing">{{ isEditing ? 'Editing' : 'View' }}</span></div>
+		</div>
+	</div>
+	<div class="spacer"></div>
+
+	<!-- Details / Form -->
+	<form *ngIf="form" [formGroup]="form" (ngSubmit)="save()">
+		<div class="grid cols-2">
+			<div>
+				<h3>Basic Info</h3>
+				<div class="grid">
+					<label>
+						<div class="muted">Name</div>
+						<input class="input" formControlName="name" [readonly]="!isEditing" placeholder="School name" />
+					</label>
+					<label>
+						<div class="muted">Address</div>
+						<input class="input" formControlName="address" [readonly]="!isEditing" placeholder="Address" />
+					</label>
+					<label>
+						<div class="muted">Headmaster</div>
+						<input class="input" formControlName="headmasterName" [readonly]="!isEditing" placeholder="Headmaster name" />
+					</label>
+				</div>
+			</div>
+			<div>
+				<h3>Contacts</h3>
+				<div class="grid">
+					<label>
+						<div class="muted">Email</div>
+						<input class="input" formControlName="contactEmail" [readonly]="!isEditing" placeholder="email@example.com" />
+					</label>
+					<label>
+						<div class="muted">Phone</div>
+						<input class="input" formControlName="contactPhone" [readonly]="!isEditing" placeholder="+1 555 0100" />
+					</label>
+				</div>
+			</div>
+		</div>
+		<div *ngIf="isEditing" style="margin-top:12px">
+			<button class="btn" type="submit" [disabled]="form?.invalid || isSaving">{{ isSaving ? 'Saving…' : 'Save changes' }}</button>
+			<button class="btn ghost" type="button" [disabled]="isSaving" (click)="cancelEditing()">Cancel</button>
+		</div>
+	</form>
+</div>
+

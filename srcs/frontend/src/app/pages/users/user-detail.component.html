@@ -1,0 +1,88 @@
+<a routerLink="/users" class="btn secondary" title="Back to Users" style="margin-bottom:16px">← Back to Users</a>
+<div *ngIf="isLoading">Loading…</div>
+<div *ngIf="error" style="color:var(--danger)">{{ error }}</div>
+<div *ngIf="user" class="card">
+	<div class="card-header">
+		<div>
+			<div class="card-title">{{ user.name }} {{ user.surname }}</div>
+			<div class="card-subtitle">User details</div>
+		</div>
+		<div>
+			<div *ngIf="!isEditing" class="grid" style="grid-template-columns:auto;">
+				<button class="btn secondary" (click)="enableEditing()">✏️ Edit</button>
+			</div>
+			<div *ngIf="isEditing" class="grid" style="grid-template-columns:auto auto; gap:8px">
+				<button class="btn" [disabled]="form?.invalid || isSaving" (click)="save()">
+					{{ isSaving ? 'Saving…' : 'Save changes' }}
+				</button>
+				<button class="btn outline" [disabled]="isSaving" (click)="cancelEditing()">Cancel</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Meta -->
+	<div class="grid cols-3">
+		<div>
+			<div class="muted">User ID</div>
+			<div><code>{{ user.id }}</code></div>
+		</div>
+		<div>
+			<div class="muted">Access Level</div>
+			<div><span class="badge">{{ user.accessLevel }}</span></div>
+		</div>
+		<div>
+			<div class="muted">Mode</div>
+			<div><span class="badge" [class.primary]="isEditing">{{ isEditing ? 'Editing' : 'View' }}</span></div>
+		</div>
+	</div>
+	<div class="spacer"></div>
+
+	<!-- Details / Form -->
+	<form *ngIf="form" [formGroup]="form" (ngSubmit)="save()">
+		<div class="grid cols-2">
+			<div>
+				<h3>Basic Info</h3>
+				<div class="grid">
+					<label>
+						<div class="muted">Name</div>
+						<input class="input" formControlName="name" [readonly]="!isEditing" placeholder="First name" />
+					</label>
+					<label>
+						<div class="muted">Surname</div>
+						<input class="input" formControlName="surname" [readonly]="!isEditing" placeholder="Last name" />
+					</label>
+					<label>
+						<div class="muted">Email</div>
+						<input class="input" formControlName="email" [readonly]="!isEditing" placeholder="email@example.com" />
+					</label>
+				</div>
+			</div>
+			<div>
+				<h3>Access & Scope</h3>
+				<div class="grid">
+					<label>
+						<div class="muted">Access Level</div>
+						<select class="input" formControlName="accessLevel" [disabled]="!isEditing">
+							<option [ngValue]="AccessLevel.Global">Global</option>
+							<option [ngValue]="AccessLevel.Region">Region</option>
+							<option [ngValue]="AccessLevel.School">School</option>
+						</select>
+					</label>
+					<label>
+						<div class="muted">Region ID</div>
+						<input class="input" formControlName="regionId" [readonly]="!isEditing" placeholder="e.g. r-1" />
+					</label>
+					<label>
+						<div class="muted">School ID</div>
+						<input class="input" formControlName="schoolId" [readonly]="!isEditing" placeholder="e.g. s-1" />
+					</label>
+				</div>
+			</div>
+		</div>
+		<div *ngIf="isEditing" style="margin-top:12px">
+			<button class="btn" type="submit" [disabled]="form?.invalid || isSaving">{{ isSaving ? 'Saving…' : 'Save changes' }}</button>
+			<button class="btn ghost" type="button" [disabled]="isSaving" (click)="cancelEditing()">Cancel</button>
+		</div>
+	</form>
+</div>
+

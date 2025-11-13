@@ -1,0 +1,48 @@
+<a routerLink="/schools">← Back to Schools</a>
+<div class="card" style="max-width:640px;margin:20px 0">
+	<h2 style="margin-top:0">Create School</h2>
+	<div *ngIf="error" style="color:var(--danger)">{{ error }}</div>
+	<div class="grid">
+		<label>
+			<div>Name</div>
+			<input class="input" [(ngModel)]="name" placeholder="School name" />
+		</label>
+		<label>
+			<div>Address</div>
+			<input class="input" [(ngModel)]="address" placeholder="Street, City" />
+		</label>
+		<div class="grid cols-2">
+			<label>
+				<div>Headmaster (optional)</div>
+				<input class="input" [(ngModel)]="headmasterName" placeholder="Full name" />
+			</label>
+			<label>
+				<div>Contact Email (optional)</div>
+				<input class="input" [(ngModel)]="contactEmail" placeholder="email@example.com" />
+			</label>
+		</div>
+		<div class="grid cols-2">
+			<label>
+				<div>Contact Phone (optional)</div>
+				<input class="input" [(ngModel)]="contactPhone" placeholder="+1 555 0100" />
+			</label>
+			<label *ngIf="allowRegionSelect">
+				<div>Region</div>
+				<select class="input" [(ngModel)]="regionId" [disabled]="isLoadingRegions">
+					<option [ngValue]="undefined" disabled>Select a region</option>
+					<option *ngFor="let r of regions" [ngValue]="r.id">{{ r.name }}</option>
+				</select>
+			</label>
+			<label *ngIf="!allowRegionSelect">
+				<div>Region</div>
+				<input class="input" [value]="regionId" disabled />
+				<div class="note">Assigned automatically from your region context</div>
+			</label>
+		</div>
+		<button class="btn" [disabled]="isSaving || !name || !address || !regionId" (click)="create()">
+			{{ isSaving ? 'Creating…' : 'Create School' }}
+		</button>
+	</div>
+</div>
+
+
