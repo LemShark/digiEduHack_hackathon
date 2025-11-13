@@ -12,9 +12,6 @@ CREATE TABLE user_account (
 ALTER TABLE user_account
     ADD CONSTRAINT uc_user_account_email UNIQUE (email);
 
-INSERT INTO user_account (id, name, surname, email, position, password_hash, access_level) VALUES
-()
-
 CREATE TABLE fancy_session (
     id UUID NOT NULL,
     message_history JSONB,

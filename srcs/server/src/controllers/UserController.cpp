@@ -5,10 +5,21 @@ void digiedu::controllers::Users::create(
     const drogon::HttpRequestPtr& request,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback
 ) {
-    dao::UserCreate user;
-    dao::UserCreate::fromRequest(request, user);
+    auto user = dao::UserCreate::fromRequest(request);
+    user.hashPassword();
 
-
-    int lol = 0;
-    ++lol;
+    const auto dbClientPtr = drogon::app().getFastDbClient();
+    dbClientPtr->newTransactionAsync([u = std::move(user), c1 = std::move(callback)] (std::shared_ptr<drogon::orm::Transaction> t) mutable {
+        u.createSql(
+            t,
+            [t, c1] (const drogon::orm::Result&) {
+                c1(drogon::HttpResponse::newHttpResponse(drogon::k200OK, drogon::CT_NONE));
+            },
+            [t, c1] (const drogon::orm::DrogonDbException& e) {
+                c1(drogon::HttpResponse::newHttpResponse(drogon::k409Conflict, drogon::CT_NONE));
+                t->rollback();
+                std::cerr << e.base().what() << std::endl;
+            }
+        );
+    });
 }
