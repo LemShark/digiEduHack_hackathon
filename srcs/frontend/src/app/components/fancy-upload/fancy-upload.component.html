@@ -27,7 +27,7 @@
 		<button class="btn secondary" (click)="reset()" [disabled]="status==='uploading' && progress<100">{{ 'common.reset' | translate }}</button>
 	</div>
 
-	<div *ngIf="status==='uploading' || status==='success'" class="progress">
+	<div *ngIf="status==='uploading'" class="progress">
 		<div class="bar" [style.width.%]="progress"></div>
 	</div>
 

@@ -48,7 +48,10 @@
     "reset": "Reset",
     "success": "Success",
     "tips": "Tips:",
-    "redirecting": "Redirecting…"
+    "redirecting": "Redirecting…",
+    "expand": "Expand",
+    "close": "Close",
+    "exportPdf": "Export PDF"
   },
   "login": {
     "title": "Login",
@@ -126,7 +129,7 @@
     "blocked": "Upload blocked",
     "tips": "You can upload CSV, XLSX, PDF, audio, or other files.",
     "provideIdAndFile": "Please provide an ID and choose a file.",
-    "fileTooLarge": "File size must be less than 50MB",
+    "fileTooLarge": "File size must be less than 500MB",
     "successMessage": "Uploaded dataset {{id}} for {{scopeId}}"
   }
 }

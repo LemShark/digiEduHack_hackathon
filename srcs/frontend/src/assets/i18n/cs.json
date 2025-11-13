@@ -48,7 +48,10 @@
     "reset": "Resetovat",
     "success": "Hotovo",
     "tips": "Tipy:",
-    "redirecting": "Přesměrování…"
+    "redirecting": "Přesměrování…",
+    "expand": "Rozšířit",
+    "close": "Zavřít",
+    "exportPdf": "Exportovat PDF"
   },
   "login": {
     "title": "Přihlášení",
@@ -126,7 +129,7 @@
     "blocked": "Nahrávání zablokováno",
     "tips": "Můžete nahrát CSV, XLSX, PDF, audio nebo jiné soubory.",
     "provideIdAndFile": "Zadejte prosím ID a zvolte soubor.",
-    "fileTooLarge": "Velikost souboru musí být menší než 50 MB",
+    "fileTooLarge": "Velikost souboru musí být menší než 500 MB",
     "successMessage": "Nahrán dataset {{id}} pro {{scopeId}}"
   }
 }

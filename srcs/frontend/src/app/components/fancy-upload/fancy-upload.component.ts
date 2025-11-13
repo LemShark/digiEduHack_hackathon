@@ -76,7 +76,7 @@ export class FancyUploadComponent {
 
 		// Quick validations (size only; accept any file type)
 		const errs: string[] = [];
-		const maxBytes = 50 * 1024 * 1024; // 50MB limit (matches proxy)
+		const maxBytes = 500 * 1024 * 1024; // 500MB limit (matches proxy)
 		if (this.selectedFile.size > maxBytes) {
 			errs.push(this.translate.instant('upload.fileTooLarge'));
 		}
