@@ -4,13 +4,16 @@
 #include "../../dependencies/libbcrypt2/include/bcrypt/BCrypt.hpp"
 
 namespace digiedu::dao {
-    struct UserCreate {
+    struct UserGetAll {
         Json::String name;
         Json::String surname;
         Json::String email;
         Json::String position;
-        Json::String password, hashedPassword;
         Json::String accessLevel;
+    };
+
+    struct UserCreate : UserGetAll {
+        Json::String password, hashedPassword;
 
         static UserCreate fromRequest(const drogon::HttpRequestPtr& request) {
             const auto& json = request->getJsonObject();

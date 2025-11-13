@@ -23,3 +23,18 @@ void digiedu::controllers::Users::create(
         );
     });
 }
+
+void digiedu::controllers::Users::getAll(
+    const drogon::HttpRequestPtr& request,
+    std::function<void(const drogon::HttpResponsePtr&)>&& callback
+) {
+    // TODO
+}
+
+void digiedu::controllers::Users::get(
+    const drogon::HttpRequestPtr& request,
+    std::function<void(const drogon::HttpResponsePtr&)>&& callback,
+    const std::string& userId
+) {
+    // TODO
+}
