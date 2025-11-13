@@ -1,20 +1,14 @@
 #include "UserController.hpp"
+#include "../dao/User.hpp"
 
-void digiedu::controllers::Users::getAll(
-    const drogon::HttpRequestPtr& /*request*/, std::function<void(const drogon::HttpResponsePtr&)> &&callback
+void digiedu::controllers::Users::create(
+    const drogon::HttpRequestPtr& request,
+    std::function<void(const drogon::HttpResponsePtr&)>&& callback
 ) {
-    auto resp = drogon::HttpResponse::newHttpResponse();
-    resp->setStatusCode(drogon::k200OK);
-    resp->setContentTypeCode(drogon::ContentType::CT_TEXT_HTML);
-    resp->setBody("All!!!");
-    callback(resp);
-}
+    dao::UserCreate user;
+    dao::UserCreate::fromRequest(request, user);
 
-void digiedu::controllers::Users::get(
-    const drogon::HttpRequestPtr& /*request*/, std::function<void(const drogon::HttpResponsePtr&)> &&callback,
-    std::string&& userName
-) {
-    auto resp = drogon::HttpResponse::newHttpResponse();
-    resp->setBody("Get: " + std::string(userName));
-    callback(resp);
+
+    int lol = 0;
+    ++lol;
 }
