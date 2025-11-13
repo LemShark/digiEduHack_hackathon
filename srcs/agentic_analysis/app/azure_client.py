@@ -38,11 +38,11 @@ def _build_client() -> OpenAI:
         # Azure OpenAI requires deployment-specific paths and an api-version query param.
         resource_base = _strip_known_suffixes(normalized)
         deployment = settings.azure_openai_model
-        base_url = f"{resource_base}/openai/deployments/{deployment}"
+        base_url = endpoint
         default_query["api-version"] = settings.azure_openai_api_version
         # Azure expects the API key in the `api-key` header rather than Authorization bearer.
         default_headers["api-key"] = api_key
-        api_key = None  # Prevent OpenAI SDK from sending the key as Bearer token.
+        #api_key = None  # Prevent OpenAI SDK from sending the key as Bearer token.
     else:
         # Standard OpenAI endpoint: let the SDK handle default base URL when possible.
         if hostname == "api.openai.com":
@@ -54,6 +54,10 @@ def _build_client() -> OpenAI:
         elif base_url and not base_url.endswith("/v1"):
             base_url = f"{base_url}/v1"
 
+    print(f"base_url: {base_url}")
+    print(f"default_headers: {default_headers}")
+    print(f"default_query: {default_query}")
+    print(f"api_key: {api_key}")
     return OpenAI(
         api_key=api_key,
         base_url=base_url,

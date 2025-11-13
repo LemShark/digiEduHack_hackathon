@@ -1,0 +1,24 @@
+<div class="card" style="max-width:640px;margin:40px auto">
+	<h2 style="margin-top:0">Login</h2>
+	<p style="color:var(--muted)">Mock login. Choose a demo user or enter email/password.</p>
+	<div class="grid">
+		<label>
+			<div>Demo users</div>
+			<select class="input" [(ngModel)]="email">
+				<option *ngFor="let u of users" [ngValue]="u.email">
+					{{u.name}} {{u.surname}} — {{u.email}}
+				</option>
+			</select>
+		</label>
+		<label>
+			<div>Email</div>
+			<input class="input" [(ngModel)]="email" placeholder="email@example.com">
+		</label>
+		<label>
+			<div>Password</div>
+			<input class="input" [(ngModel)]="password" type="password" placeholder="Password">
+		</label>
+		<button class="btn" (click)="login()">Continue</button>
+	</div>
+</div>
+

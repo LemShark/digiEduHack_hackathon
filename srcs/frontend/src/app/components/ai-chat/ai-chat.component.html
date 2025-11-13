@@ -1,0 +1,24 @@
+<div class="card">
+	<div class="card-header">
+		<div>
+			<div class="card-title">AI BI Agent</div>
+			<div class="card-subtitle">Conversational analysis</div>
+		</div>
+	</div>
+	<div class="chat-window">
+		<div *ngFor="let m of messages" class="msg" [class.me]="m.role==='user'">
+			<div class="bubble">{{ m.text }}</div>
+		</div>
+		<div *ngIf="isThinking" class="msg">
+			<div class="bubble typing">
+				<img src="/assets/Talking-robot-chatbot.gif" alt="AI is typing" class="typing-gif" />
+			</div>
+		</div>
+	</div>
+	<div class="chat-input">
+		<input class="input" type="text" placeholder="Ask about trends, KPIs, comparisons…" [(ngModel)]="draft" (keyup.enter)="send()" />
+		<button class="btn" (click)="send()">Send</button>
+	</div>
+</div>
+
+

@@ -1,0 +1,40 @@
+<nav class="nav">
+	<div class="nav-inner container">
+		<a class="brand" routerLink="/">
+			<img src="/assets/logo.svg" alt="DigiEdu" class="brand-logo">
+			<span class="sr-only">{{ title }}</span>
+		</a>
+		<div class="nav-links" *ngIf="auth.isLoggedIn(); else loggedOut">
+			<a routerLink="/regions" routerLinkActive="active" *ngIf="isGlobal() || isRegion()">Regions</a>
+			<a routerLink="/schools" routerLinkActive="active" *ngIf="isGlobal() || isRegion()">Schools</a>
+			<a routerLink="/users" routerLinkActive="active" *ngIf="isGlobal()">Users</a>
+			<a routerLink="/overview/global" routerLinkActive="active" *ngIf="isGlobal()">Global Overview</a>
+			<a routerLink="/overview/region" routerLinkActive="active" *ngIf="isGlobal() || isRegion()">Regional Overview</a>
+			<a routerLink="/upload/region" routerLinkActive="active" *ngIf="isRegion()">Regional Upload</a>
+			<a routerLink="/overview/school" routerLinkActive="active" *ngIf="isSchool()">School Overview</a>
+			<a routerLink="/upload/school" routerLinkActive="active" *ngIf="isSchool()">School Upload</a>
+		</div>
+		<ng-template #loggedOut>
+			<div class="nav-links">
+				<a routerLink="/login">Login</a>
+			</div>
+		</ng-template>
+		<div style="margin-left:auto" *ngIf="auth.isLoggedIn()">
+			<span style="color:var(--muted);margin-right:8px">
+				{{ auth.currentUser()?.name }} ({{ auth.currentUser()?.accessLevel }})
+				<span *ngIf="isViewAs()" style="margin-left:6px;color:var(--warning)">
+					[Viewing as {{ auth.viewAsInfo()?.level }} {{
+						auth.viewAsInfo()?.regionId || auth.viewAsInfo()?.schoolId
+					}}]
+				</span>
+			</span>
+			<button class="btn secondary" *ngIf="isViewAs()" (click)="exitViewAs()" style="margin-right:8px">Exit View As</button>
+			<button class="btn secondary" (click)="logout()">Logout</button>
+		</div>
+	</div>
+</nav>
+
+<main class="container page-wrapper" style="padding-top:16px" [@routeAnimations]="getRouteAnimationState(o)">
+	<router-outlet #o="outlet"></router-outlet>
+</main>
+
