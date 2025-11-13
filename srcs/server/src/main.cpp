@@ -3,11 +3,11 @@
 #include "controllers/TestCtrl.hpp"
 
 int main() {
-  /*const char* hostPtr = std::getenv("SERVER_HOST");
-  const char* dbPtr = std::getenv("SERVER_DB");
-  const char* portPtr = std::getenv("SERVER_PORT");
-  const char* userPtr = std::getenv("SERVER_USER");
-  const char* passwordPtr = std::getenv("SERVER_PASSWORD");
+  /*const char* hostPtr = std::getenv("SERVER_DB_HOST");
+  const char* dbPtr = std::getenv("SERVER_DB_DB");
+  const char* portPtr = std::getenv("SERVER_DB_PORT");
+  const char* userPtr = std::getenv("SERVER_DB_USER");
+  const char* passwordPtr = std::getenv("SERVER_DB_PASSWORD");
 
   auto config = std::make_shared<sqlpp::postgresql::connection_config>();
   config->host = hostPtr;
