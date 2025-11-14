@@ -9,8 +9,9 @@ void digiedu::controllers::Users::create(
     auto user = dao::User::fromCreateRequest(request);
     user.hashPassword();
 
-    const auto db = drogon::app().getFastDbClient();
-    db->newTransactionAsync([u = std::move(user), c = std::move(callback)] (std::shared_ptr<drogon::orm::Transaction> t) mutable {
+    drogon::app().getFastDbClient()->newTransactionAsync([u = std::move(user), c = std::move(callback)] (
+        std::shared_ptr<drogon::orm::Transaction> t
+    ) mutable {
         u.execCreateSqlAsync(
             t,
             [t, c] (const drogon::orm::Result&) {
@@ -29,13 +30,12 @@ void digiedu::controllers::Users::getAll(
     const drogon::HttpRequestPtr&,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback
 ) {
-    const auto db = drogon::app().getFastDbClient();
-    db->execSqlAsync(
-        dao::User::getAllSql(),
+    dao::User::execGetAllSqlAsync(
+        drogon::app().getFastDbClient(),
         [callback] (const drogon::orm::Result& r) {
             Json::Value root;
             for (size_t i = 0; i < r.size(); ++i)
-                root.insert(i, dao::User::getAllRowToJson(r[i]));
+                root.insert(i, dao::User::getRowToJson(r[i]));
             utils::jsonResponse(callback, std::move(root), drogon::k200OK);
         },
         [callback] (const drogon::orm::DrogonDbException& e) {
@@ -46,9 +46,23 @@ void digiedu::controllers::Users::getAll(
 }
 
 void digiedu::controllers::Users::get(
-    const drogon::HttpRequestPtr& request,
+    const drogon::HttpRequestPtr&,
     std::function<void(const drogon::HttpResponsePtr&)>&& callback,
     const std::string& userId
 ) {
-    // TODO
+    dao::User::execGetSqlAsync(
+        drogon::app().getFastDbClient(),
+        userId,
+        [callback] (const drogon::orm::Result& r) {
+            if (r.empty()) {
+                utils::emptyResponse(callback, drogon::k404NotFound);
+                return;
+            }
+            utils::jsonResponse(callback, dao::User::getRowToJson(r[0]), drogon::k200OK);
+        },
+        [callback] (const drogon::orm::DrogonDbException& e) {
+            utils::emptyResponse(callback, drogon::k500InternalServerError);
+            std::cerr << e.base().what() << std::endl;
+        }
+    );
 }

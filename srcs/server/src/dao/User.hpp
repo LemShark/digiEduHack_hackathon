@@ -31,7 +31,7 @@ namespace digiedu::dao {
         }
 
         void execCreateSqlAsync(
-            const std::shared_ptr<drogon::orm::Transaction>& t,
+            const drogon::orm::DbClientPtr& t,
             drogon::orm::ResultCallback resClb,
             drogon::orm::ExceptionCallback exClb
         ) const {
@@ -44,11 +44,33 @@ namespace digiedu::dao {
             );
         }
 
-        static const char* getAllSql() {
-            return "SELECT id, name, surname, email, position, access_level FROM user_account";
+        static void execGetAllSqlAsync(
+            const drogon::orm::DbClientPtr& t,
+            drogon::orm::ResultCallback resClb,
+            drogon::orm::ExceptionCallback exClb
+        ) {
+            t->execSqlAsync(
+                "SELECT id, name, surname, email, position, access_level FROM user_account",
+                std::move(resClb),
+                std::move(exClb)
+            );
         }
 
-        static Json::Value getAllRowToJson(const drogon::orm::Row& r) {
+        static void execGetSqlAsync(
+            const drogon::orm::DbClientPtr& t,
+            const std::string& id,
+            drogon::orm::ResultCallback resClb,
+            drogon::orm::ExceptionCallback exClb
+        ) {
+            t->execSqlAsync(
+                "SELECT id, name, surname, email, position, access_level FROM user_account WHERE id=$1",
+                std::move(resClb),
+                std::move(exClb),
+                id
+            );
+        }
+
+        static Json::Value getRowToJson(const drogon::orm::Row& r) {
             Json::Value root;
             root["id"] = r["id"].as<std::string>();
             root["name"] = r["name"].as<std::string>();
