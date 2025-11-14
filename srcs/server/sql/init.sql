@@ -64,6 +64,8 @@ CREATE TABLE audio_recording(
     audio_path TEXT NOT NULL,
     transcript_text TEXT NOT NULL,
     duration_sec INT NULL,
+    summary TEXT,
+    embedding TSVECTOR,
     CONSTRAINT pk_audio_recording PRIMARY KEY (id)
 );
 
@@ -88,5 +90,7 @@ CREATE TABLE raw_document(
     file_path TEXT NOT NULL,
     text_content TEXT NULL,
     table_data JSONB NULL,
+    summary TEXT,
+    embedding TSVECTOR,
     CONSTRAINT pk_raw_document PRIMARY KEY (id)
 );
