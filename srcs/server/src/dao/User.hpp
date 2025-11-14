@@ -4,18 +4,16 @@
 #include "../../dependencies/libbcrypt2/include/bcrypt/BCrypt.hpp"
 
 namespace digiedu::dao {
-    struct UserGetAll {
+    struct User {
+        Json::String id;
         Json::String name;
         Json::String surname;
         Json::String email;
         Json::String position;
-        Json::String accessLevel;
-    };
-
-    struct UserCreate : UserGetAll {
         Json::String password, hashedPassword;
+        Json::String accessLevel;
 
-        static UserCreate fromRequest(const drogon::HttpRequestPtr& request) {
+        static User fromCreateRequest(const drogon::HttpRequestPtr& request) {
             const auto& json = request->getJsonObject();
             return {
                 (*json)["name"].asString(),
@@ -32,7 +30,7 @@ namespace digiedu::dao {
             hashedPassword = BCrypt::generateHash(password);
         }
 
-        void createSql(
+        void execCreateSqlAsync(
             const std::shared_ptr<drogon::orm::Transaction>& t,
             drogon::orm::ResultCallback resClb,
             drogon::orm::ExceptionCallback exClb
@@ -44,6 +42,21 @@ namespace digiedu::dao {
                 std::move(exClb),
                 name, surname, email, position, hashedPassword, accessLevel
             );
+        }
+
+        static const char* getAllSql() {
+            return "SELECT id, name, surname, email, position, access_level FROM user_account";
+        }
+
+        static Json::Value getAllRowToJson(const drogon::orm::Row& r) {
+            Json::Value root;
+            root["id"] = r["id"].as<std::string>();
+            root["name"] = r["name"].as<std::string>();
+            root["surname"] = r["surname"].as<std::string>();
+            root["email"] = r["email"].as<std::string>();
+            root["position"] = r["position"].as<std::string>();
+            root["access_level"] = r["access_level"].as<std::string>();
+            return root;
         }
     };
 }
